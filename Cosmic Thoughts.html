@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cosmic Thoughts — Immersive Journal (2025)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --star-black: #0a0a0f;
+      --nebula-blue: #2a2f4f;
+      --starlight-white: #f5f5f5;
+      --cosmic-violet: #9d7cf7;
+      --cosmic-pink: #d966ff;
+      --cosmic-teal: #4fd1c5;
+      --transition-speed: 0.8s;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--star-black);
+      color: var(--starlight-white);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      position: relative;
+      min-height: 100vh;
+      cursor: none;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+    }
+    /* Custom Cursor */
+    .custom-cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--cosmic-violet);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease, background 0.3s ease, width 0.3s ease, height 0.3s ease;
+      box-shadow: 0 0 20px rgba(157, 124, 247, 0.5);
+      mix-blend-mode: difference;
+    }
+    .custom-cursor.hover {
+      width: 40px;
+      height: 40px;
+      background: rgba(157, 124, 247, 0.3);
+      box-shadow: 0 0 30px rgba(157, 124, 247, 0.8);
+    }
+    /* Starfield Background */
+    .starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .star {
+      position: absolute;
+      background-color: var(--starlight-white);
+      border-radius: 50%;
+      z-index: 1;
+    }
+    .nebula {
+      position: absolute;
+      background: radial-gradient(circle, var(--cosmic-violet) 0%, transparent 70%);
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: 0.15;
+      z-index: 0;
+    }
+    .shooting-star {
+      position: absolute;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--starlight-white), transparent);
+      transform: rotate(-45deg);
+      z-index: 2;
+      opacity: 0;
+    }
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(10px);
+      background-color: rgba(10, 10, 15, 0.5);
+      transition: transform 0.5s ease, background-color 0.8s ease;
+    }
+    header h1 {
+      font-size: 2rem;
+      cursor: pointer;
+      letter-spacing: -0.5px;
+      position: relative;
+    }
+    header h1::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--cosmic-violet);
+      transition: width 0.5s ease;
+    }
+    header h1:hover::after {
+      width: 100%;
+    }
+    header h1:hover {
+      color: var(--cosmic-violet);
+      text-shadow: 0 0 20px rgba(157, 124, 247, 0.7);
+    }
+    .mode-toggle {
+      padding: 0.75rem 1.5rem;
+      background: rgba(42, 47, 79, 0.3);
+      border: 2px solid rgba(42, 47, 79, 0.5);
+      color: var(--starlight-white);
+      border-radius: 2rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.5s ease;
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .mode-toggle:hover {
+      background: rgba(42, 47, 79, 0.5);
+      border-color: var(--cosmic-violet);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 20px rgba(157, 124, 247, 0.3);
+    }
+    /* Search Bar */
+    .search-container {
+      position: relative;
+      margin-left: 2rem;
+    }
+    .search-input {
+      padding: 0.75rem 1.5rem;
+      padding-left: 2.5rem;
+      background: rgba(42, 47, 79, 0.3);
+      border: 2px solid rgba(42, 47, 79, 0.5);
+      color: var(--starlight-white);
+      border-radius: 2rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      width: 240px;
+      transition: all 0.5s ease;
+      backdrop-filter: blur(10px);
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: var(--cosmic-violet);
+      background: rgba(42, 47, 79, 0.5);
+      width: 300px;
+    }
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--starlight-white);
+      opacity: 0.7;
+    }
+    /* Progress Bar */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: rgba(0, 0, 0, 0.2);
+      z-index: 99;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--cosmic-violet);
+      position: relative;
+      transition: width 0.2s ease;
+      border-radius: 0 3px 3px 0;
+    }
+    .progress-bar::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: -5px;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 10px;
+      background: var(--cosmic-violet);
+      border-radius: 50%;
+      opacity: 0;
+      box-shadow: 0 0 0 0 rgba(157, 124, 247, 0.7);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% {
+        transform: translateY(-50%) scale(1);
+        box-shadow: 0 0 0 0 rgba(157, 124, 247, 0.7);
+        opacity: 1;
+      }
+      70% {
+        transform: translateY(-50%) scale(1.5);
+        box-shadow: 0 0 0 15px rgba(157, 124, 247, 0);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(-50%) scale(1.5);
+        box-shadow: 0 0 0 15px rgba(157, 124, 247, 0);
+        opacity: 0;
+      }
+    }
+    /* Floating Particles */
+    .floating-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--cosmic-violet);
+      opacity: 0;
+    }
+    /* Main Content */
+    main {
+      padding-top: 5rem;
+      position: relative;
+      z-index: 10;
+    }
+    /* Dashboard */
+    .dashboard {
+      padding: 5rem 2rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .dashboard-title {
+      font-size: 5rem;
+      line-height: 1;
+      text-align: center;
+      margin-bottom: 3rem;
+      letter-spacing: -1px;
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .dashboard-title::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--cosmic-violet), transparent);
+      border-radius: 3px;
+    }
+    .dashboard-title span {
+      display: block;
+    }
+    .dashboard-subtitle {
+      text-align: center;
+      font-size: 1.2rem;
+      opacity: 0.8;
+      margin-bottom: 4rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.7;
+    }
+    .constellations {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .constellations h2 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+    }
+    .constellations h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: var(--cosmic-violet);
+      border-radius: 3px;
+    }
+    .filter-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .filter-btn {
+      padding: 1rem 2rem;
+      background: rgba(42, 47, 79, 0.2);
+      border: 2px solid rgba(42, 47, 79, 0.4);
+      color: var(--starlight-white);
+      border-radius: 2rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.5s ease;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+    .filter-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(157, 124, 247, 0.2), transparent);
+      transition: left 0.5s;
+    }
+    .filter-btn:hover::before {
+      left: 100%;
+    }
+    .filter-btn:hover {
+      background: rgba(42, 47, 79, 0.4);
+      border-color: var(--cosmic-violet);
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(157, 124, 247, 0.3);
+    }
+    .filter-btn.active {
+      background: rgba(157, 124, 247, 0.3);
+      border-color: var(--cosmic-violet);
+      color: var(--cosmic-violet);
+    }
+    .posts-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+    @media (min-width: 1024px) {
+      .posts-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (min-width: 1400px) {
+      .posts-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .post-card {
+      background: rgba(42, 47, 79, 0.05);
+      border: 1px solid rgba(42, 47, 79, 0.2);
+      border-radius: 1.5rem;
+      padding: 2.5rem;
+      cursor: pointer;
+      transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      overflow: hidden;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .post-card:hover {
+      transform: translateY(-15px) scale(1.03);
+      border-color: rgba(157, 124, 247, 0.5);
+      box-shadow: 0 20px 50px rgba(157, 124, 247, 0.2);
+      background: rgba(42, 47, 79, 0.1);
+    }
+    .post-card:hover::before {
+      opacity: 0.1;
+    }
+    .post-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, var(--cosmic-violet) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      z-index: 0;
+      border-radius: 1.5rem;
+    }
+    .post-card-content {
+      position: relative;
+      z-index: 2;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .post-card h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.3;
+      transition: color 0.3s ease, text-shadow 0.5s ease;
+    }
+    .post-card:hover h3 {
+      color: var(--cosmic-violet);
+      text-shadow: 0 0 20px rgba(157, 124, 247, 0.7);
+    }
+    .post-excerpt {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+      color: rgba(245, 245, 245, 0.85);
+      transition: all 0.5s ease;
+      flex-grow: 1;
+    }
+    .post-card:hover .post-excerpt {
+      color: var(--starlight-white);
+      transform: translateY(-5px);
+    }
+    .post-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .post-date, .post-category {
+      padding: 0.5rem 1.25rem;
+      border-radius: 2rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .post-date {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(42, 47, 79, 0.4);
+    }
+    .post-category {
+      background: rgba(157, 124, 247, 0.2);
+      color: var(--cosmic-violet);
+      border: 1px solid rgba(157, 124, 247, 0.3);
+    }
+    .glow-star {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 12px;
+      height: 12px;
+      background: var(--cosmic-violet);
+      border-radius: 50%;
+      z-index: 2;
+      box-shadow: 0 0 0 0 rgba(157, 124, 247, 0.7);
+      animation: glow-pulse 3s infinite;
+    }
+    @keyframes glow-pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(157, 124, 247, 0.7), 0 0 0 0 rgba(157, 124, 247, 0.3);
+      }
+      50% {
+        box-shadow: 0 0 0 15px rgba(157, 124, 247, 0), 0 0 0 30px rgba(157, 124, 247, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(157, 124, 247, 0), 0 0 0 0 rgba(157, 124, 247, 0);
+      }
+    }
+    /* Post View */
+    .post-view {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 5rem 2rem 8rem;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.8s forwards;
+    }
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .post-header {
+      margin-bottom: 4rem;
+      position: relative;
+    }
+    .post-header::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+      width: 100px;
+      height: 4px;
+      background: var(--cosmic-violet);
+      border-radius: 2px;
+    }
+    .post-title {
+      font-size: 3.5rem;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.5px;
+    }
+    .post-title span {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: letterFadeIn 0.8s forwards;
+    }
+    @keyframes letterFadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .post-info {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+    .post-info-item {
+      padding: 0.75rem 1.5rem;
+      background: rgba(42, 47, 79, 0.2);
+      border-radius: 2rem;
+      border: 1px solid rgba(42, 47, 79, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .post-content {
+      font-size: 1.25rem;
+      line-height: 1.9;
+      margin-bottom: 4rem;
+    }
+    .post-paragraph {
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s forwards;
+    }
+    .highlight {
+      background: linear-gradient(120deg, rgba(157, 124, 247, 0.2), rgba(157, 124, 247, 0.1));
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.3rem;
+      position: relative;
+    }
+    .highlight::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--cosmic-violet);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.5s ease;
+    }
+    .highlight:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+    .post-image {
+      width: 100%;
+      border-radius: 1.5rem;
+      margin: 3rem 0;
+      box-shadow: 0 10px 50px rgba(157, 124, 247, 0.3);
+      border: 1px solid rgba(157, 124, 247, 0.2);
+      transition: all 0.5s ease;
+    }
+    .post-image:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 20px 70px rgba(157, 124, 247, 0.5);
+    }
+    .image-caption {
+      text-align: center;
+      font-size: 0.9rem;
+      color: rgba(245, 245, 245, 0.7);
+      margin-top: 1rem;
+      font-style: italic;
+    }
+    .post-footer {
+      padding-top: 3rem;
+      border-top: 1px solid rgba(42, 47, 79, 0.3);
+    }
+    .share-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .share-label {
+      color: rgba(42, 47, 79, 0.7);
+      font-size: 1.1rem;
+    }
+    .share-btn {
+      padding: 0.75rem 1.5rem;
+      background: rgba(42, 47, 79, 0.2);
+      border: 1px solid rgba(42, 47, 79, 0.3);
+      color: var(--starlight-white);
+      border-radius: 2rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .share-btn:hover {
+      background: rgba(42, 47, 79, 0.4);
+      border-color: var(--cosmic-violet);
+      color: var(--cosmic-violet);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(157, 124, 247, 0.3);
+    }
+    .related-posts {
+      margin-top: 4rem;
+    }
+    .related-posts h3 {
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+    }
+    .related-posts h3::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: var(--cosmic-violet);
+    }
+    .related-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .related-card {
+      background: rgba(42, 47, 79, 0.1);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(42, 47, 79, 0.2);
+    }
+    .related-card:hover {
+      background: rgba(42, 47, 79, 0.2);
+      transform: translateY(-5px);
+      border-color: var(--cosmic-violet);
+    }
+    .related-card h4 {
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+      color: var(--cosmic-violet);
+    }
+    .related-card p {
+      font-size: 0.95rem;
+      color: rgba(245, 245, 245, 0.8);
+      line-height: 1.6;
+    }
+    /* Constellation Navigation */
+    .constellation-nav {
+      position: fixed;
+      bottom: 3rem;
+      left: 2rem;
+      right: 2rem;
+      display: flex;
+      justify-content: space-between;
+      z-index: 90;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.8s 0.5s forwards;
+    }
+    .nav-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .nav-star {
+      width: 24px;
+      height: 24px;
+      background: var(--cosmic-violet);
+      border-radius: 50%;
+      position: relative;
+      cursor: pointer;
+      box-shadow: 0 0 0 0 rgba(157, 124, 247, 0.7);
+      animation: navGlow 3s infinite;
+      transition: all 0.3s ease;
+      border: 2px solid var(--starlight-white);
+      z-index: 2;
+    }
+    .nav-star:hover {
+      transform: scale(1.5);
+      box-shadow: 0 0 20px 5px rgba(157, 124, 247, 0.9);
+    }
+    @keyframes navGlow {
+      0% {
+        box-shadow: 0 0 0 0 rgba(157, 124, 247, 0.7);
+      }
+      50% {
+        box-shadow: 0 0 0 10px rgba(157, 124, 247, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(157, 124, 247, 0);
+      }
+    }
+    .nav-tooltip {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: rgba(42, 47, 79, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      width: 280px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(157, 124, 247, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      z-index: 10;
+    }
+    .nav-star:hover .nav-tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .tooltip-title {
+      font-size: 1.2rem;
+      color: var(--cosmic-violet);
+      margin-bottom: 0.75rem;
+      font-weight: 700;
+    }
+    .tooltip-excerpt {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--starlight-white);
+      opacity: 0.9;
+    }
+    .nav-line {
+      height: 2px;
+      border-top: 2px dotted var(--cosmic-violet);
+      opacity: 0.5;
+      position: absolute;
+      top: 50%;
+      z-index: 1;
+    }
+    .prev-line {
+      left: 30px;
+      right: -30px;
+      transform: rotate(-10deg);
+    }
+    .next-line {
+      right: 30px;
+      left: -30px;
+      transform: rotate(10deg);
+    }
+    /* Star Trail */
+    .star-trail {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      background: var(--cosmic-violet);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.8;
+      transform: translate(-50%, -50%);
+      filter: blur(1px);
+      box-shadow: 0 0 10px 2px var(--cosmic-violet);
+    }
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 4rem 2rem 2rem;
+      color: rgba(42, 47, 79, 0.4);
+      font-size: 1.1rem;
+      font-family: 'Inter', sans-serif;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.8s 0.8s forwards;
+      position: relative;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+    .footer-link {
+      color: rgba(42, 47, 79, 0.6);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .footer-link::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--cosmic-violet);
+      transition: width 0.3s ease;
+    }
+    .footer-link:hover {
+      color: var(--cosmic-violet);
+    }
+    .footer-link:hover::after {
+      width: 100%;
+    }
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(42, 47, 79, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      color: var(--starlight-white);
+      text-decoration: none;
+    }
+    .social-icon:hover {
+      background: var(--cosmic-violet);
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(157, 124, 247, 0.4);
+    }
+    /* Daylight Mode */
+    body.daylight {
+      background: linear-gradient(135deg, #f5f5f5, #e6e6f0);
+      color: var(--nebula-blue);
+    }
+    body.daylight .starfield {
+      display: none;
+    }
+    body.daylight header {
+      background-color: rgba(245, 245, 245, 0.8);
+      backdrop-filter: blur(10px);
+    }
+    body.daylight .post-card {
+      background: rgba(255, 255, 255, 0.7);
+      border-color: rgba(210, 210, 230, 0.5);
+    }
+    body.daylight .post-card:hover {
+      border-color: rgba(157, 124, 247, 0.3);
+    }
+    body.daylight .post-date {
+      background: rgba(255, 255, 255, 0.5);
+      border-color: rgba(210, 210, 230, 0.5);
+    }
+    body.daylight .post-category {
+      background: rgba(157, 124, 247, 0.1);
+      border-color: rgba(157, 124, 247, 0.2);
+    }
+    body.daylight .progress-container {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    body.daylight .post-info-item {
+      background: rgba(255, 255, 255, 0.5);
+      border-color: rgba(210, 210, 230, 0.5);
+    }
+    body.daylight .nav-tooltip {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(157, 124, 247, 0.2);
+    }
+    body.daylight .highlight {
+      background: linear-gradient(120deg, rgba(157, 124, 247, 0.1), rgba(157, 124, 247, 0.05));
+    }
+    body.daylight .related-card {
+      background: rgba(255, 255, 255, 0.5);
+      border-color: rgba(210, 210, 230, 0.5);
+    }
+    /* Animations */
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+    /* Loading Screen */
+    .loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--star-black);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 1s ease;
+    }
+    .loading-logo {
+      font-size: 3rem;
+      font-family: 'Playfair Display', serif;
+      color: var(--starlight-white);
+      margin-bottom: 2rem;
+      letter-spacing: -1px;
+    }
+    .loading-progress {
+      width: 300px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .loading-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--cosmic-violet);
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+    .loading-text {
+      margin-top: 1rem;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+    }
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .dashboard-title {
+        font-size: 3.5rem;
+      }
+      .post-title {
+        font-size: 2.5rem;
+      }
+      .posts-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .post-card {
+        padding: 2rem;
+      }
+      .constellation-nav {
+        bottom: 2rem;
+        left: 1rem;
+        right: 1rem;
+      }
+      .nav-star {
+        width: 20px;
+        height: 20px;
+      }
+      .tooltip-title {
+        font-size: 1.1rem;
+      }
+      .search-container {
+        display: none;
+      }
+      .related-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 480px) {
+      header {
+        padding: 1rem;
+      }
+      .dashboard-title {
+        font-size: 2.5rem;
+      }
+      .post-title {
+        font-size: 2rem;
+      }
+      .mode-toggle {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="custom-cursor"></div>
+  <div class="starfield" id="starfield"></div>
+  <div class="floating-particles" id="floating-particles"></div>
+  <div class="loading-screen" id="loading-screen">
+    <div class="loading-logo">Cosmic Thoughts</div>
+    <div class="loading-progress">
+      <div class="loading-bar" id="loading-bar"></div>
+    </div>
+    <div class="loading-text">Loading the cosmos...</div>
+  </div>
+  <header>
+    <h1 id="site-title">Cosmic Thoughts</h1>
+    <div class="search-container">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" placeholder="Search cosmic thoughts...">
+    </div>
+    <button class="mode-toggle" id="mode-toggle">
+      <span>☀️</span>
+      <span>Daylight Mode</span>
+    </button>
+  </header>
+  <div class="progress-container">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+  <main>
+    <div class="dashboard" id="dashboard">
+      <h1 class="dashboard-title">
+        <span>Cosmic</span>
+        <span>Thoughts</span>
+      </h1>
+      <p class="dashboard-subtitle">A personal journal of reflections, ideas, and cosmic wonderings as I navigate the universe within and around me.</p>
+      <div class="constellations">
+        <h2>Constellations</h2>
+        <div class="filter-buttons">
+          <button class="filter-btn">All</button>
+          <button class="filter-btn">Reflections</button>
+          <button class="filter-btn">Ideas</button>
+          <button class="filter-btn">Journeys</button>
+        </div>
+      </div>
+      <div class="posts-grid" id="posts-grid">
+        <!-- Posts will be inserted here by JavaScript -->
+      </div>
+    </div>
+    <div class="post-view" id="post-view" style="display: none;">
+      <article>
+        <header class="post-header">
+          <h1 class="post-title" id="post-title"></h1>
+          <div class="post-info">
+            <span class="post-info-item">
+              <span>📅</span>
+              <span id="post-date"></span>
+            </span>
+            <span class="post-info-item">
+              <span>🌌</span>
+              <span id="post-category"></span>
+            </span>
+          </div>
+        </header>
+        <div class="post-content" id="post-content">
+          <!-- Content will be inserted here by JavaScript -->
+        </div>
+        <div class="related-posts">
+          <h3>Related Cosmic Thoughts</h3>
+          <div class="related-grid" id="related-posts">
+            <!-- Related posts will be inserted here -->
+          </div>
+        </div>
+        <footer class="post-footer">
+          <div class="share-section">
+            <span class="share-label">Share this cosmic thought</span>
+            <button class="share-btn">
+              <span>🐦</span>
+              <span>Twitter</span>
+            </button>
+            <button class="share-btn">
+              <span>🐘</span>
+              <span>Mastodon</span>
+            </button>
+            <button class="share-btn">
+              <span>🟦</span>
+              <span>Bluesky</span>
+            </button>
+          </div>
+        </footer>
+      </article>
+    </div>
+    <div class="constellation-nav" id="constellation-nav" style="display: none;">
+      <!-- Navigation stars will be inserted here by JavaScript -->
+    </div>
+  </main>
+  <footer>
+    <div class="footer-links">
+      <a href="#" class="footer-link">About</a>
+      <!--a href="#" class="footer-link">Subscribe</a-->
+      <!--a href="#" class="footer-link">Archive</a-->
+      <!--a href="#" class="footer-link">Contact</a-->
+      <!--a href="#" class="footer-link">Privacy</a-->
+    </div>
+    <div class="social-icons">
+      <a href="https://x.com/gamer_show1465" class="social-icon">𝕏</a>
+      <a href="SOON" class="social-icon">📱</a>
+      <!--a href="#" class="social-icon">📷</a-->
+      <!--a href="#" class="social-icon">🎧</a-->
+    </div>
+    <p>© 2025 Cosmic Thoughts — Floating through the universe, one thought at a time.</p>
+    <p>DEV: SHOWROV</p>
+  </footer>
+  <script>
+    // Posts data with more content and images
+    const posts = [
+  {
+    id: 1,
+    title: "The Silence Between Stars",
+    excerpt: "Contemplating the vast emptiness that connects us all...",
+    category: "Reflections",
+    date: "March 15, 2025",
+    content: "In the <span class='highlight'>quiet between stars</span>, there exists a silence so profound it echoes through the fabric of spacetime. This is where we find our truest thoughts, unburdened by the noise of daily existence. The cosmos whispers secrets to those who listen in the dark.\n<img src='https://placehold.co/800x400/2a2f4f/9d7cf7?text=Cosmic+Void' alt='The space between stars' class='post-image'>\n<div class='image-caption'>The vast emptiness between celestial bodies holds its own beauty and meaning.</div>\nAs I float through these cosmic thoughts, I'm reminded that we are all made of <span class='highlight'>stardust</span>, connected across unimaginable distances by the same fundamental particles that once danced in the hearts of ancient suns.\nThe void is not empty, but full of potential - a canvas upon which the universe paints its masterpiece with light and gravity. In this infinite expanse, every atom in our bodies tells a story that began billions of years ago, in the nuclear furnaces of long-dead stars.\nWhat does it mean to be conscious in such a vast universe? To be aware of our own existence while floating on a pale blue dot in the cosmic ocean? These are the questions that keep me awake at night, staring at the ceiling as if it were the night sky."
+  },
+  {
+    id: 2,
+    title: "Quantum Dreams",
+    excerpt: "Where physics meets philosophy in the realm of possibility...",
+    category: "Ideas",
+    date: "March 12, 2025",
+    content: "In the <span class='highlight'>quantum realm</span>, particles exist in multiple states simultaneously until observed. This strange reality mirrors our own human experience - we contain multitudes, possibilities branching like cosmic filaments with each decision we make.\n<img src='https://placehold.co/800x400/2a2f4f/9d7cf7?text=Quantum+Realm' alt='Quantum physics visualization' class='post-image'>\n<div class='image-caption'>The quantum world challenges our understanding of reality itself.</div>\nWhat if consciousness itself is a quantum phenomenon? A collapse of wave functions that creates our perceived reality from the infinite potential of the universe? Some physicists suggest that our brains might be quantum computers, processing information in ways we're only beginning to understand.\nThese are the questions that keep me awake at night, staring at the ceiling as if it were the night sky, wondering what other realities might exist just beyond the veil of our perception. The <span class='highlight'>many-worlds interpretation</span> suggests that every decision we make splits the universe into multiple branches, creating parallel realities where different versions of ourselves live out different lives.\nPerhaps in one of those realities, I'm not writing this at all. Perhaps in another, you're reading a completely different version of this essay. The possibilities are as infinite as the universe itself."
+  },
+  {
+    id: 3,
+    title: "Gravity of Emotions",
+    excerpt: "How feelings bend the spacetime of our inner universe...",
+    category: "Reflections",
+    date: "March 8, 2025",
+    content: "<span class='highlight'>Emotions have mass</span>. They warp the spacetime of our inner universe, creating gravitational wells that pull our thoughts into orbits around them. Joy creates gentle curves in our perception, while grief forms black holes from which not even light can escape.\n<img src='https://placehold.co/800x400/2a2f4f/9d7cf7?text=Emotional+Gravity' alt='Visualization of emotional gravity' class='post-image'>\n<div class='image-caption'>Our emotions create their own gravitational fields within us.</div>\nYet even the strongest gravitational fields eventually dissipate. Time, that relentless cosmic constant, smooths the fabric of our emotional spacetime, allowing us to move forward, to escape the orbits that once held us captive.\nIn this cosmic dance of feeling, we are both the celestial bodies and the spacetime they bend - creators and creations of our own emotional universe. When we experience love, we create wormholes that connect us to others across vast distances. When we feel anger, we generate supernovae that can destroy entire solar systems of relationships.\nThe most beautiful part? We have the power to <span class='highlight'>reshape our emotional spacetime</span>. Through mindfulness, compassion, and understanding, we can alter the gravitational constants of our inner worlds, creating environments where joy can flourish and pain can transform into wisdom."
+  },
+  {
+    id: 4,
+    title: "Cosmic Creativity",
+    excerpt: "Tapping into the universal source of inspiration...",
+    category: "Ideas",
+    date: "March 5, 2025",
+    content: "Creativity flows through the universe like <span class='highlight'>dark matter</span> - invisible yet essential to the structure of everything. When we create, we tap into this cosmic current, channeling energy from the void itself.\n<img src='https://placehold.co/800x400/2a2f4f/9d7cf7?text=Cosmic+Creativity' alt='Artistic representation of cosmic creativity' class='post-image'>\n<div class='image-caption'>The creative force is as fundamental as gravity in the universe.</div>\nThe blank page is not empty but full of potential, a quantum foam of possibilities waiting to collapse into form. Each word, each brushstroke, each note is a star being born in the darkness. Artists throughout history have spoken of the muse, that elusive source of inspiration that seems to come from beyond ourselves. Perhaps they were right - perhaps creativity is literally a cosmic force that we can learn to channel.\nPerhaps the universe itself is the ultimate creative act - a story being written in real-time across 13.8 billion years, with each of us as both author and character in this grand cosmic narrative. When we create, we participate in the universe's ongoing act of self-expression.\nThe next time you feel stuck, uninspired, or blocked, remember: you are not separate from the creative force of the universe. You are an expression of it. The same energy that spins galaxies and births stars flows through you, waiting to be shaped into something beautiful."
+  },
+  {
+    id: 5,
+    title: "The Music of Spheres",
+    excerpt: "Discovering the cosmic symphony that surrounds us...",
+    category: "Journeys",
+    date: "February 28, 2025",
+    content: "The ancient Greeks believed in the <span class='highlight'>Music of the Spheres</span> - the idea that celestial bodies create a harmonic symphony as they move through the heavens. Modern science has revealed that they were more right than they could have known.\n<img src='https://placehold.co/800x400/2a2f4f/9d7cf7?text=Music+of+Spheres' alt='Visualization of cosmic music' class='post-image'>\n<div class='image-caption'>The universe sings in frequencies both audible and beyond our perception.</div>\nPulsars emit rhythmic radio waves like cosmic metronomes. Black holes create gravitational waves that ripple through spacetime like bass notes in a universal symphony. Even the cosmic microwave background radiation - the afterglow of the Big Bang - contains harmonic patterns that reveal the fundamental structure of our universe.\nWhen I put on headphones and listen to certain types of ambient music, I sometimes feel like I'm tuning into this cosmic frequency. The vibrations resonate with something deep within me, as if my cells remember the song of creation. Perhaps this is why music has such power over us - it connects us to the fundamental vibrations of the universe.\nI've started a practice of <span class='highlight'>cosmic listening</span> - sitting in silence and imagining the sounds of the universe around me. The hum of distant quasars, the chime of colliding neutron stars, the whisper of solar winds. It's a meditation that makes me feel simultaneously insignificant and deeply connected to everything."
+  },
+  {
+    id: 6,
+    title: "Time Dilation and Memory",
+    excerpt: "How our perception of time shapes our experience of reality...",
+    category: "Reflections",
+    date: "February 21, 2025",
+    content: "According to Einstein's theory of relativity, <span class='highlight'>time is not absolute</span>. It stretches and contracts depending on gravity and velocity. A clock on a satellite runs slightly faster than one on Earth. An astronaut traveling near light speed would age slower than their twin back home.\n<img src='https://placehold.co/800x400/2a2f4f/9d7cf7?text=Time+Dilation' alt='Visualization of time dilation' class='post-image'>\n<div class='image-caption'>Time flows differently depending on where you are in the universe.</div>\nBut what about our subjective experience of time? Why does an hour feel like minutes when we're engaged in something we love, but like an eternity when we're waiting in line? Our brains have their own form of time dilation, governed not by gravity but by attention, emotion, and memory.\nChildhood summers felt endless because everything was new - our brains were processing so much novel information that time seemed to expand. As adults, routines compress our perception of time. The years fly by because we're not encoding as many unique memories.\nThis realization has changed how I live. I seek out <span class='highlight'>novel experiences</span> not just for their own sake, but to stretch my subjective experience of time. I practice mindfulness to slow down moments of beauty. I journal to create more memory anchors that will make my life feel rich and full when I look back on it.\nPerhaps the key to a long life isn't just adding years to our existence, but adding existence to our years - creating a subjective time dilation that makes our有限 time feel infinite."
+  }
+];
+    // DOM Elements
+    const starfield = document.getElementById('starfield');
+    const floatingParticles = document.getElementById('floating-particles');
+    const modeToggle = document.getElementById('mode-toggle');
+    const progressBar = document.getElementById('progress-bar');
+    const dashboard = document.getElementById('dashboard');
+    const postView = document.getElementById('post-view');
+    const postsGrid = document.getElementById('posts-grid');
+    const postTitle = document.getElementById('post-title');
+    const postDate = document.getElementById('post-date');
+    const postCategory = document.getElementById('post-category');
+    const postContent = document.getElementById('post-content');
+    const constellationNav = document.getElementById('constellation-nav');
+    const siteTitle = document.getElementById('site-title');
+    const loadingScreen = document.getElementById('loading-screen');
+    const loadingBar = document.getElementById('loading-bar');
+    const customCursor = document.querySelector('.custom-cursor');
+    const searchInput = document.querySelector('.search-input');
+    // Create starfield background
+    function createStarfield() {
+      // Create nebula clouds
+      for (let i = 0; i < 25; i++) {
+        const nebula = document.createElement('div');
+        nebula.className = 'nebula';
+        nebula.style.width = `${Math.random() * 120 + 60}px`;
+        nebula.style.height = nebula.style.width;
+        nebula.style.left = `${Math.random() * 100}%`;
+        nebula.style.top = `${Math.random() * 100}%`;
+        nebula.style.opacity = Math.random() * 0.2 + 0.1;
+        nebula.style.background = `radial-gradient(circle, ${getRandomColor()} 0%, transparent 70%)`;
+        starfield.appendChild(nebula);
+        // Animate nebula
+        animateElement(nebula, {
+          scale: [1, 1.2, 1],
+          opacity: [nebula.style.opacity, parseFloat(nebula.style.opacity) + 0.1, nebula.style.opacity],
+        }, (Math.random() * 10 + 10) * 1000, true);
+      }
+      // Create stars
+      for (let i = 0; i < 300; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        const size = Math.random() * 4 + 1;
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.top = `${Math.random() * 100}%`;
+        star.style.opacity = Math.random() * 0.8 + 0.2;
+        star.style.boxShadow = `0 0 ${size * 2}px rgba(245, 245, 245, ${Math.random() * 0.5 + 0.3})`;
+        starfield.appendChild(star);
+        // Animate star
+        animateElement(star, {
+          opacity: [star.style.opacity, parseFloat(star.style.opacity) * 1.5, star.style.opacity],
+          scale: [1, 1.3, 1],
+          boxShadow: [
+            `0 0 ${size * 2}px rgba(245, 245, 245, ${Math.random() * 0.5 + 0.3})`,
+            `0 0 ${size * 4}px rgba(245, 245, 245, ${Math.random() * 0.8 + 0.5})`,
+            `0 0 ${size * 2}px rgba(245, 245, 245, ${Math.random() * 0.5 + 0.3})`
+          ]
+        }, (Math.random() * 3 + 2) * 1000, true);
+      }
+      // Create shooting stars
+      for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+          createShootingStar();
+        }, Math.random() * 60000);
+      }
+    }
+    // Create shooting star
+    function createShootingStar() {
+      const star = document.createElement('div');
+      star.className = 'shooting-star';
+      star.style.width = `${Math.random() * 100 + 50}px`;
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.top = `${Math.random() * 100}%`;
+      star.style.opacity = '0';
+      starfield.appendChild(star);
+      // Animate shooting star
+      setTimeout(() => {
+        star.style.opacity = '1';
+        star.style.transition = 'all 1s ease-in';
+        setTimeout(() => {
+          star.style.opacity = '0';
+          setTimeout(() => {
+            star.remove();
+            // Create another shooting star after a delay
+            setTimeout(() => {
+              createShootingStar();
+            }, Math.random() * 30000);
+          }, 1000);
+        }, 1000);
+      }, 100);
+    }
+    // Get random color for nebula
+    function getRandomColor() {
+      const colors = [
+        'rgba(157, 124, 247, 0.8)', // cosmic violet
+        'rgba(217, 102, 255, 0.8)', // cosmic pink
+        'rgba(79, 209, 197, 0.8)', // cosmic teal
+        'rgba(255, 102, 153, 0.8)', // cosmic rose
+        'rgba(102, 153, 255, 0.8)' // cosmic blue
+      ];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+    // Create floating particles
+    function createFloatingParticles() {
+      for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+        particle.style.width = `${Math.random() * 6 + 2}px`;
+        particle.style.height = particle.style.width;
+        particle.style.background = getRandomColor();
+        particle.style.opacity = '0';
+        particle.style.boxShadow = `0 0 10px ${getRandomColor()}`;
+        floatingParticles.appendChild(particle);
+        // Animate particle
+        animateElement(particle, {
+          opacity: [0, Math.random() * 0.6 + 0.2, 0],
+          transform: [`translate(0, 0)`, `translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px)`, `translate(0, 0)`],
+        }, (Math.random() * 10 + 10) * 1000, true);
+      }
+    }
+    // Star trail effect
+    let starTrails = [];
+    let lastTrailTime = 0;
+    document.addEventListener('mousemove', (e) => {
+      const now = Date.now();
+      if (now - lastTrailTime > 50) { // Limit to 20 trails per second
+        lastTrailTime = now;
+        const trail = document.createElement('div');
+        trail.className = 'star-trail';
+        trail.style.left = `${e.clientX}px`;
+        trail.style.top = `${e.clientY}px`;
+        trail.style.opacity = '0.8';
+        document.body.appendChild(trail);
+        starTrails.push({
+          element: trail,
+          life: 1
+        });
+        // Remove after animation
+        setTimeout(() => {
+          const index = starTrails.findIndex(t => t.element === trail);
+          if (index !== -1) {
+            starTrails.splice(index, 1);
+            if (trail.parentNode) {
+              trail.parentNode.removeChild(trail);
+            }
+          }
+        }, 1000);
+      }
+      // Move custom cursor
+      if (customCursor) {
+        customCursor.style.left = `${e.clientX}px`;
+        customCursor.style.top = `${e.clientY}px`;
+      }
+    });
+    // Custom cursor interactions
+    document.addEventListener('DOMContentLoaded', () => {
+      const interactiveElements = document.querySelectorAll('a, button, input, .post-card, .nav-star, .filter-btn');
+      interactiveElements.forEach(element => {
+        element.addEventListener('mouseenter', () => {
+          if (customCursor) {
+            customCursor.classList.add('hover');
+          }
+        });
+        element.addEventListener('mouseleave', () => {
+          if (customCursor) {
+            customCursor.classList.remove('hover');
+          }
+        });
+      });
+    });
+    // Animation function
+    function animateElement(element, keyframes, duration, loop = false) {
+      const totalFrames = 60;
+      const frameDuration = duration / totalFrames;
+      let currentFrame = 0;
+      function update() {
+        if (currentFrame <= totalFrames) {
+          const progress = currentFrame / totalFrames;
+          // Apply keyframes based on progress
+          for (const property in keyframes) {
+            const values = keyframes[property];
+            let value;
+            if (values.length === 3) {
+              // Use ease-in-out for 3 keyframes
+              if (progress < 0.5) {
+                value = typeof values[0] === 'string' ? values[0] : values[0] + (values[1] - values[0]) * (progress * 2);
+              } else {
+                value = typeof values[1] === 'string' ? values[1] : values[1] + (values[2] - values[1]) * ((progress - 0.5) * 2);
+              }
+            } else {
+              value = typeof values[0] === 'string' ? values[0] : values[0] + (values[values.length - 1] - values[0]) * progress;
+            }
+            if (property === 'scale') {
+              element.style.transform = `scale(${value})`;
+            } else if (property === 'transform') {
+              element.style.transform = value;
+            } else {
+              element.style[property] = value;
+            }
+          }
+          currentFrame++;
+          requestAnimationFrame(update);
+        } else if (loop) {
+          currentFrame = 0;
+          requestAnimationFrame(update);
+        }
+      }
+      requestAnimationFrame(update);
+    }
+    // Render posts grid
+    function renderPostsGrid() {
+      postsGrid.innerHTML = '';
+      posts.forEach((post, index) => {
+        const postCard = document.createElement('div');
+        postCard.className = 'post-card';
+        postCard.dataset.id = post.id;
+        postCard.innerHTML = `
+          <div class="glow-star"></div>
+          <div class="post-card-content">
+            <h3>${post.title}</h3>
+            <p class="post-excerpt">${post.excerpt}</p>
+            <div class="post-meta">
+              <span class="post-date">${post.date}</span>
+              <span class="post-category">${post.category}</span>
+            </div>
+          </div>
+        `;
+        // Add animation delay based on index
+        postCard.style.animationDelay = `${index * 0.1}s`;
+        postCard.addEventListener('click', () => {
+          showPost(post.id);
+        });
+        // Animate the glow star
+        setTimeout(() => {
+          const glowStar = postCard.querySelector('.glow-star');
+          if (glowStar) {
+            animateElement(glowStar, {
+              boxShadow: [
+                '0 0 0 0 rgba(157, 124, 247, 0.7)',
+                '0 0 0 15px rgba(157, 124, 247, 0)',
+                '0 0 0 0 rgba(157, 124, 247, 0)'
+              ]
+            }, 3000, true);
+          }
+        }, 500 + index * 100);
+        postsGrid.appendChild(postCard);
+      });
+    }
+    // Show post view
+    function showPost(postId) {
+      const post = posts.find(p => p.id === postId);
+      if (!post) return;
+      // Hide dashboard
+      dashboard.style.display = 'none';
+      // Show post view
+      postView.style.display = 'block';
+      // Set post content
+      postTitle.innerHTML = post.title.split('').map((char, i) => 
+        `<span style="animation-delay: ${i * 0.05}s">${char}</span>`).join('');
+      postDate.textContent = post.date;
+      postCategory.textContent = post.category;
+// Split content into paragraphs and elements
+postContent.innerHTML = '';
+const contentParts = post.content.split('\n');
+contentParts.forEach((part, index) => {
+  if (part.startsWith('<img')) {
+    postContent.innerHTML += part;
+  } else if (part.startsWith('<div class="image-caption">')) {
+    postContent.innerHTML += part;
+  } else {
+    const p = document.createElement('p');
+    p.className = 'post-paragraph';
+    p.style.animationDelay = `${index * 0.1 + 0.5}s`;
+    p.innerHTML = part;
+    postContent.appendChild(p);
+  }
+});
+      // Generate related posts
+      generateRelatedPosts(postId);
+      // Show constellation navigation
+      renderConstellationNav(postId);
+      constellationNav.style.display = 'flex';
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    // Generate related posts
+    function generateRelatedPosts(currentPostId) {
+      const relatedPostsContainer = document.getElementById('related-posts');
+      relatedPostsContainer.innerHTML = '';
+      // Get posts from same category, excluding current post
+      const currentPost = posts.find(p => p.id === currentPostId);
+      let relatedPosts = posts.filter(p => p.category === currentPost.category && p.id !== currentPostId);
+      // If not enough related posts, add random ones
+      if (relatedPosts.length < 2) {
+        const additionalPosts = posts.filter(p => p.id !== currentPostId)
+          .sort(() => 0.5 - Math.random())
+          .slice(0, 2 - relatedPosts.length);
+        relatedPosts = [...relatedPosts, ...additionalPosts];
+      }
+      // Limit to 2 related posts
+      relatedPosts = relatedPosts.slice(0, 2);
+      relatedPosts.forEach(post => {
+        const relatedCard = document.createElement('div');
+        relatedCard.className = 'related-card';
+        relatedCard.innerHTML = `
+          <h4>${post.title}</h4>
+          <p>${post.excerpt}</p>
+        `;
+        relatedCard.addEventListener('click', () => {
+          showPost(post.id);
+        });
+        relatedPostsContainer.appendChild(relatedCard);
+      });
+    }
+    // Render constellation navigation
+    function renderConstellationNav(currentPostId) {
+      constellationNav.innerHTML = '';
+      const currentIndex = posts.findIndex(post => post.id === currentPostId);
+      const prevPost = currentIndex > 0 ? posts[currentIndex - 1] : null;
+      const nextPost = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
+      if (prevPost) {
+        const prevContainer = document.createElement('div');
+        prevContainer.className = 'nav-container';
+        const prevStar = document.createElement('div');
+        prevStar.className = 'nav-star';
+        prevStar.innerHTML = `
+          <div class="nav-tooltip">
+            <div class="tooltip-title">${prevPost.title}</div>
+            <div class="tooltip-excerpt">${prevPost.excerpt}</div>
+          </div>
+          <div class="nav-line prev-line"></div>
+        `;
+        prevStar.addEventListener('click', () => {
+          showPost(prevPost.id);
+        });
+        prevContainer.appendChild(prevStar);
+        constellationNav.appendChild(prevContainer);
+      }
+      if (nextPost) {
+        const nextContainer = document.createElement('div');
+        nextContainer.className = 'nav-container';
+        const nextStar = document.createElement('div');
+        nextStar.className = 'nav-star';
+        nextStar.innerHTML = `
+          <div class="nav-tooltip">
+            <div class="tooltip-title">${nextPost.title}</div>
+            <div class="tooltip-excerpt">${nextPost.excerpt}</div>
+          </div>
+          <div class="nav-line next-line"></div>
+        `;
+        nextStar.addEventListener('click', () => {
+          showPost(nextPost.id);
+        });
+        nextContainer.appendChild(nextStar);
+        constellationNav.appendChild(nextContainer);
+      }
+    }
+    // Update progress bar on scroll
+    function updateProgressBar() {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      progressBar.style.width = `${scrollPercent}%`;
+      // Show completion animation when near the end
+      if (scrollPercent > 98) {
+        progressBar.style.boxShadow = '0 0 20px 5px rgba(157, 124, 247, 0.9)';
+      } else {
+        progressBar.style.boxShadow = 'none';
+      }
+    }
+    // Toggle dark/light mode
+    function toggleMode() {
+      document.body.classList.toggle('daylight');
+      if (document.body.classList.contains('daylight')) {
+        modeToggle.innerHTML = '<span>🌙</span><span>Cosmic Mode</span>';
+      } else {
+        modeToggle.innerHTML = '<span>☀️</span><span>Daylight Mode</span>';
+      }
+    }
+    // Search functionality
+    function initSearch() {
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        if (query.length > 0) {
+          // Filter posts based on search query
+          const filteredPosts = posts.filter(post => 
+            post.title.toLowerCase().includes(query) || 
+            post.excerpt.toLowerCase().includes(query) ||
+            post.content.toLowerCase().includes(query)
+          );
+          // Update UI to show search results
+          if (dashboard.style.display !== 'none') {
+            postsGrid.innerHTML = '';
+            if (filteredPosts.length === 0) {
+              postsGrid.innerHTML = '<div class="text-center py-10">No cosmic thoughts found matching your search.</div>';
+            } else {
+              filteredPosts.forEach((post, index) => {
+                const postCard = document.createElement('div');
+                postCard.className = 'post-card';
+                postCard.dataset.id = post.id;
+                postCard.innerHTML = `
+                  <div class="glow-star"></div>
+                  <div class="post-card-content">
+                    <h3>${post.title}</h3>
+                    <p class="post-excerpt">${post.excerpt}</p>
+                    <div class="post-meta">
+                      <span class="post-date">${post.date}</span>
+                      <span class="post-category">${post.category}</span>
+                    </div>
+                  </div>
+                `;
+                postCard.style.animationDelay = `${index * 0.1}s`;
+                postCard.addEventListener('click', () => {
+                  showPost(post.id);
+                });
+                postsGrid.appendChild(postCard);
+              });
+            }
+          }
+        } else {
+          // Show all posts if search is cleared
+          if (dashboard.style.display !== 'none') {
+            renderPostsGrid();
+          }
+        }
+      });
+    }
+    // Loading screen animation
+    function initLoadingScreen() {
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += Math.random() * 10 + 5;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+          // Fade out loading screen
+          setTimeout(() => {
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => {
+              loadingScreen.style.display = 'none';
+            }, 1000);
+          }, 500);
+        }
+        loadingBar.style.width = `${progress}%`;
+      }, 200);
+    }
+    // Initialize the application
+    function init() {
+      // Show loading screen
+      initLoadingScreen();
+      // Create background elements after a short delay
+      setTimeout(() => {
+        createStarfield();
+        createFloatingParticles();
+        renderPostsGrid();
+        initSearch();
+        
+        // ADD THIS CODE TO ENABLE CATEGORY FILTERING
+
+        // Get all filter buttons
+        const filterButtons = document.querySelectorAll('.filter-btn');
+
+        // Add click event listener to each button
+        filterButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            // Remove 'active' class from all buttons
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            // Add 'active' class to the clicked button
+            button.classList.add('active');
+
+            // Get the selected category
+            const selectedCategory = button.textContent;
+
+            // Filter the posts based on the selected category
+            let filteredPosts;
+            if (selectedCategory === 'All') {
+              filteredPosts = [...posts]; // Show all posts
+            } else {
+              filteredPosts = posts.filter(post => post.category === selectedCategory);
+            }
+
+            // Clear the current posts grid
+            postsGrid.innerHTML = '';
+
+            // If no posts match the filter, show a message
+            if (filteredPosts.length === 0) {
+              postsGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 3rem; font-size: 1.2rem; color: rgba(245, 245, 245, 0.7);">No posts found in this category.</div>';
+              return;
+            }
+
+            // Render the filtered posts
+            filteredPosts.forEach((post, index) => {
+              const postCard = document.createElement('div');
+              postCard.className = 'post-card';
+              postCard.dataset.id = post.id;
+              postCard.innerHTML = `
+                <div class="glow-star"></div>
+                <div class="post-card-content">
+                  <h3>${post.title}</h3>
+                  <p class="post-excerpt">${post.excerpt}</p>
+                  <div class="post-meta">
+                    <span class="post-date">${post.date}</span>
+                    <span class="post-category">${post.category}</span>
+                  </div>
+                </div>
+              `;
+              postCard.style.animationDelay = `${index * 0.1}s`;
+              postCard.addEventListener('click', () => {
+                showPost(post.id);
+              });
+              postsGrid.appendChild(postCard);
+            });
+          });
+        });
+
+        // Trigger the 'All' button by default to show all posts on load
+        filterButtons[0].click();
+        
+      }, 1000);
+      // Event listeners
+      modeToggle.addEventListener('click', toggleMode);
+      siteTitle.addEventListener('click', () => {
+        if (postView.style.display !== 'none') {
+          postView.style.display = 'none';
+          constellationNav.style.display = 'none';
+          dashboard.style.display = 'block';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+      window.addEventListener('scroll', updateProgressBar);
+      // Animate star trails
+      function animateStarTrails() {
+        starTrails.forEach(trail => {
+          trail.life -= 0.02;
+          if (trail.life <= 0) {
+            if (trail.element.parentNode) {
+              trail.element.parentNode.removeChild(trail.element);
+            }
+          } else {
+            trail.element.style.opacity = trail.life * 0.8;
+            trail.element.style.transform = `translate(-50%, -50%) scale(${1 + (1 - trail.life) * 0.5})`;
+          }
+        });
+        requestAnimationFrame(animateStarTrails);
+      }
+      animateStarTrails();
+      // Add keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (postView.style.display !== 'none') {
+          const currentPostId = parseInt(document.querySelector('.post-card.active')?.dataset.id || posts[0].id);
+          const currentIndex = posts.findIndex(p => p.id === currentPostId);
+          if (e.key === 'ArrowLeft' && currentIndex > 0) {
+            showPost(posts[currentIndex - 1].id);
+          } else if (e.key === 'ArrowRight' && currentIndex < posts.length - 1) {
+            showPost(posts[currentIndex + 1].id);
+          } else if (e.key === 'Escape') {
+            postView.style.display = 'none';
+            constellationNav.style.display = 'none';
+            dashboard.style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        }
+      });
+    }
+    // Start the application when page loads
+    window.addEventListener('load', init);
+  </script>
+</body>
+</html>
